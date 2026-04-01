@@ -1,0 +1,31 @@
+name: Auto Run Code
+
+# Hành động này sẽ tự động kích hoạt mỗi khi bạn push code lên nhánh main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest # Máy chủ ảo của GitHub (chạy Linux)
+
+    steps:
+      # Bước 1: Copy code từ repo của bạn vào máy chủ ảo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Bước 2: Cài đặt môi trường Python (Nếu dùng C# thì đổi thành setup-dotnet)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Bước 3: Chạy file code với input và xuất ra output
+      - name: Run code with Input/Output
+        run: |
+          # Chạy file main.py, truyền dữ liệu từ input.txt và lưu vào output.txt
+          python main.py < input.txt > output.txt
+          
+          # In kết quả từ output.txt ra màn hình log của GitHub để bạn xem
+          echo "=== KẾT QUẢ OUTPUT ==="
+          cat output.txt
